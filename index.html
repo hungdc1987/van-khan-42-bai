@@ -217,7 +217,7 @@ document.getElementById('f').onsubmit=function(e){e.preventDefault();
  btn.disabled=true;btn.textContent='ĐANG GỬI...';
  fetch(ENDPOINT,{method:'POST',body:JSON.stringify({product:'42-bai',name:document.getElementById('n').value,phone:ph,address:document.getElementById('a').value,quantity:q,shipping:25000,requestId:rid,website:document.getElementById('hp').value})})
  .then(function(r){return r.json()}).then(function(d){
-  if(d&&d.ok){var val=q*PRICE+SHIP;fbqT('track','Purchase',{content_ids:['42-bai'],content_type:'product',num_items:q,value:val,currency:'VND'},{eventID:String(d.orderId)});fbqT('track','Lead',{value:val,currency:'VND'});document.getElementById('f').reset();setq(1);msg('Đã nhận đơn. Mã đơn: '+String(d.orderId).slice(0,12)+'. Bên mình sẽ gọi xác nhận đơn trong thời gian sớm nhất.',true);btn.textContent='ĐÃ GỬI ĐƠN'}
+  if(d&&d.ok){var val=q*PRICE+SHIP;fbqT('track','Purchase',{content_ids:['42-bai'],content_type:'product',num_items:q,value:val,currency:'VND'},{eventID:String(d.orderId)});fbqT('track','Lead',{value:val,currency:'VND'});fbqT('track','CompleteRegistration',{content_name:'Đặt sách 42 bài',value:val,currency:'VND',status:true},{eventID:'reg-'+String(d.orderId)});document.getElementById('f').reset();setq(1);msg('Đã nhận đơn. Mã đơn: '+String(d.orderId).slice(0,12)+'. Bên mình sẽ gọi xác nhận đơn trong thời gian sớm nhất.',true);btn.textContent='ĐÃ GỬI ĐƠN'}
   else{throw new Error('x')}})
  .catch(function(){btn.disabled=false;btn.textContent='GỬI ĐƠN ĐẶT SÁCH';rid=newId();msg('Chưa gửi được đơn. Bạn thử lại hoặc gọi 0989 830 947 để đặt ngay.',false)})};
 /* reveal + bar */
