@@ -70,7 +70,14 @@ footer{background:var(--navy2);color:#bdb5de;text-align:center;padding:30px 18px
 @media(max-width:780px){body{font-size:16px}.hg,.bg,.ba,.cred,.pain{grid-template-columns:1fr}.hero h1{font-size:33px}.steps{grid-template-columns:1fr}.shots{grid-template-columns:repeat(2,1fr)}.feat{grid-template-columns:1fr}h2{font-size:26px}section{padding:40px 0}.stats b{font-size:20px}.stats .w{grid-template-columns:repeat(2,1fr)}.btn.ghost{margin:10px 0 0}.photo{transform:none}.spec{grid-template-columns:1fr 1fr}.nav{display:none}.pain figure{max-width:300px;margin:0 auto}}
 @media(min-width:781px){.slide{flex-basis:300px}}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
-</style></head><body>
+</style><script>
+/* Meta Pixel: điền Pixel ID vào đây */
+var FB_PIXEL_ID='';
+window.fbqT=function(){if(window.fbq)fbq.apply(null,arguments)};
+if(FB_PIXEL_ID){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init',FB_PIXEL_ID);fbq('track','PageView');fbq('track','ViewContent',{content_name:'Văn khấn toàn tập 42 bài',content_ids:['42-bai'],content_type:'product',value:179000,currency:'VND'});}
+</script>
+</head><body>
 <div class="top">🚚 Giao hàng toàn quốc chỉ 25.000đ · Hotline <a href="tel:0989830947">0989 830 947</a></div>
 <div class="hero"><div class="w"><span class="tag">Văn khấn toàn tập · 42 bài khấn theo từng dịp</span>
 <div class="hg"><div>
@@ -201,13 +208,16 @@ document.getElementById('m').onclick=function(){if(q>1)setq(q-1)};document.getEl
 function newId(){return(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)+'xxxxxxxx'}
 var rid=newId();
 function msg(t,ok){var m=document.getElementById('msg');m.textContent=t;m.style.display='block';m.style.background=ok?'#e7f4e4':'#fdeaea';m.style.color=ok?'#1f5a1a':'#8a1c1c'}
+var ic=0;document.getElementById('f').addEventListener('focusin',function(){if(!ic){ic=1;fbqT('track','InitiateCheckout',{content_ids:['42-bai'],content_type:'product',value:179000,currency:'VND',num_items:1})}});
+[].forEach.call(document.querySelectorAll('a[href="#dat-mua"]'),function(a){a.addEventListener('click',function(){fbqT('trackCustom','ClickDatMua')})});
+[].forEach.call(document.querySelectorAll('a[href^="tel:"]'),function(a){a.addEventListener('click',function(){fbqT('track','Contact')})});
 document.getElementById('f').onsubmit=function(e){e.preventDefault();
  var btn=document.getElementById('sb'),ph=document.getElementById('p').value.replace(/\s/g,'');
  if(!/^(0\d{9}|\+84\d{9})$/.test(ph)){msg('Số điện thoại chưa đúng, vui lòng kiểm tra lại (10 số, bắt đầu bằng 0).',false);return}
  btn.disabled=true;btn.textContent='ĐANG GỬI...';
  fetch(ENDPOINT,{method:'POST',body:JSON.stringify({product:'42-bai',name:document.getElementById('n').value,phone:ph,address:document.getElementById('a').value,quantity:q,shipping:25000,requestId:rid,website:document.getElementById('hp').value})})
  .then(function(r){return r.json()}).then(function(d){
-  if(d&&d.ok){document.getElementById('f').reset();setq(1);msg('Đã nhận đơn. Mã đơn: '+String(d.orderId).slice(0,12)+'. Bên mình sẽ gọi xác nhận đơn trong thời gian sớm nhất.',true);btn.textContent='ĐÃ GỬI ĐƠN'}
+  if(d&&d.ok){var val=q*PRICE+SHIP;fbqT('track','Purchase',{content_ids:['42-bai'],content_type:'product',num_items:q,value:val,currency:'VND'},{eventID:String(d.orderId)});fbqT('track','Lead',{value:val,currency:'VND'});document.getElementById('f').reset();setq(1);msg('Đã nhận đơn. Mã đơn: '+String(d.orderId).slice(0,12)+'. Bên mình sẽ gọi xác nhận đơn trong thời gian sớm nhất.',true);btn.textContent='ĐÃ GỬI ĐƠN'}
   else{throw new Error('x')}})
  .catch(function(){btn.disabled=false;btn.textContent='GỬI ĐƠN ĐẶT SÁCH';rid=newId();msg('Chưa gửi được đơn. Bạn thử lại hoặc gọi 0989 830 947 để đặt ngay.',false)})};
 /* reveal + bar */
