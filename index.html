@@ -98,11 +98,11 @@ footer{background:var(--navy2);color:#bdb5de;text-align:center;padding:30px 18px
 <div class="spec rv"><div><b>Tác giả</b>Nguyễn Duy Hùng</div><div><b>Nhà xuất bản</b>Hồng Đức</div><div><b>Số trang</b>148 trang</div><div><b>Khổ sách</b>19 × 27 cm</div><div><b>ISBN</b>978-604-351-217-5</div><div><b>Số ĐKXB</b>4858-2021/CXBIPH/04155/HD</div></div>
 <div class="cost rv" style="margin-top:28px"><p><em>Nguyễn Duy Hùng</em>, nhà nghiên cứu Hán Nôm, biên soạn sách với hơn 50 năm tìm hiểu phong tục, tập quán, tín ngưỡng của người Việt.</p></div></div></div></section>
 
-<section class="buy" id="dat-mua"><div class="w"><h2 class="rv">Đặt mua Văn khấn toàn tập</h2><p class="sub rv">Điền thông tin, bấm gửi. Tin nhắn đặt hàng sẽ mở sẵn trên điện thoại của bạn, chỉ cần bấm gửi.</p>
+<section class="buy" id="dat-mua"><div class="w"><h2 class="rv">Đặt mua Văn khấn toàn tập</h2><p class="sub rv">Điền thông tin và bấm gửi. Bên mình sẽ gọi xác nhận đơn trước khi giao.</p>
 <div class="bg"><div class="offer rv"><div class="big">179.000đ</div><small style="font:14px Arial;color:#6b5d4f">chưa gồm phí giao hàng</small><ul><li>Trọn bộ 42 bài khấn theo từng dịp</li><li>Có mục lục tra cứu nhanh</li><li>Hướng dẫn sắm lễ ở nhiều dịp</li><li>Tặng kèm ứng dụng Văn Khấn Việt</li><li>Giao hàng toàn quốc</li></ul></div>
 <form id="f" class="rv"><label for="n">Họ và tên</label><input id="n" required autocomplete="name"><label for="p">Số điện thoại</label><input id="p" type="tel" inputmode="tel" required autocomplete="tel"><label for="a">Địa chỉ nhận hàng</label><textarea id="a" rows="2" required autocomplete="street-address"></textarea>
 <label>Số lượng</label><div class="qty"><button type="button" id="m" aria-label="Giảm">−</button><output id="q">1</output><button type="button" id="pl" aria-label="Tăng">+</button></div>
-<button class="btn" type="submit">GỬI ĐƠN ĐẶT SÁCH</button><p class="fine">Phí giao hàng, thời gian giao và cách thanh toán sẽ được xác nhận lại với bạn qua điện thoại trước khi giao. Cần hỗ trợ ngay: <a href="tel:0989830947">0989 830 947</a>.</p></form></div></div></section>
+<input id="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><button class="btn" id="sb" type="submit">GỬI ĐƠN ĐẶT SÁCH</button><div id="msg" role="status" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;font:15px/1.5 Arial"></div><p class="fine">Phí giao hàng, thời gian giao và cách thanh toán sẽ được xác nhận lại với bạn qua điện thoại trước khi giao. Cần hỗ trợ ngay: <a href="tel:0989830947">0989 830 947</a>.</p></form></div></div></section>
 
 <section><div class="w" style="max-width:740px"><h2 class="rv">Câu hỏi thường gặp</h2><p class="sub rv"></p>
 <details><summary>Người mới, chưa từng cúng lễ có dùng được không?</summary><p>Được. Sách có mục lục để tìm đúng dịp và nhiều dịp có hướng dẫn sắm lễ. Lưu ý phong tục có thể khác nhau theo từng gia đình và vùng miền.</p></details>
@@ -116,6 +116,16 @@ footer{background:var(--navy2);color:#bdb5de;text-align:center;padding:30px 18px
 <div class="bar"><b>179.000đ</b><a class="btn call" href="tel:0989830947">GỌI</a><a class="btn" href="#dat-mua">ĐẶT MUA</a></div>
 <script>
 var q=1,Q=document.getElementById('q');document.getElementById('m').onclick=function(){if(q>1)Q.textContent=--q};document.getElementById('pl').onclick=function(){if(q<50)Q.textContent=++q};
-document.getElementById('f').onsubmit=function(e){e.preventDefault();var t='ĐẶT SÁCH Văn khấn toàn tập (42 bài)\nSố lượng: '+q+'\nHọ tên: '+n.value+'\nSĐT: '+p.value+'\nĐịa chỉ: '+a.value;location.href='sms:0989830947?&body='+encodeURIComponent(t)};
+var ENDPOINT='https://script.google.com/macros/s/AKfycbwfP-G0QtlUFujmdzHoW_qTkRWLRDNByWMISp-Nu4BSwvwzcDK6TbY54t4cnTTrCl1Jug/exec';
+var rid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)+'xxxxxxxx';
+function msg(t,ok){var m=document.getElementById('msg');m.textContent=t;m.style.display='block';m.style.background=ok?'#e7f4e4':'#fdeaea';m.style.color=ok?'#1f5a1a':'#8a1c1c'}
+document.getElementById('f').onsubmit=function(e){e.preventDefault();
+var btn=document.getElementById('sb'),ph=p.value.replace(/\s/g,'');
+if(!/^(0\d{9}|\+84\d{9})$/.test(ph)){msg('Số điện thoại chưa đúng, vui lòng kiểm tra lại (10 số, bắt đầu bằng 0).',false);return}
+btn.disabled=true;btn.textContent='ĐANG GỬI...';
+fetch(ENDPOINT,{method:'POST',body:JSON.stringify({product:'42-bai',name:n.value,phone:ph,address:a.value,quantity:q,requestId:rid,website:document.getElementById('hp').value})})
+.then(function(r){return r.json()}).then(function(d){
+if(d&&d.ok){document.getElementById('f').reset();q=1;Q.textContent=1;msg('Đã nhận đơn. Mã đơn: '+d.orderId.slice(0,12)+'. Bên mình sẽ gọi xác nhận phí giao hàng và thời gian giao trong thời gian sớm nhất.',true);btn.textContent='ĐÃ GỬI ĐƠN'}
+else{throw new Error('x')}}).catch(function(){btn.disabled=false;btn.textContent='GỬI ĐƠN ĐẶT SÁCH';rid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)+'xxxxxxxx';msg('Chưa gửi được đơn. Bạn thử lại hoặc gọi 0989 830 947 để đặt ngay.',false)})};
 var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});document.querySelectorAll('.rv').forEach(function(x){io.observe(x)});
 </script></body></html>
