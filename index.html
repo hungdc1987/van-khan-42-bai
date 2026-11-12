@@ -197,7 +197,7 @@ function draw(d){
   var names=[];
   document.querySelectorAll('.vnmap g[data-n]').forEach(function(g){
     var n=g.getAttribute('data-n'),v=c[n]||0,x=+g.getAttribute('data-x'),y=+g.getAttribute('data-y');
-    if(!v) return;
+    if(!v){names.push([n,0]);return;}
     var r=3+Math.sqrt(v/max)*7;
     var p1=document.createElementNS(NS,'circle');p1.setAttribute('cx',x);p1.setAttribute('cy',y);p1.setAttribute('r',r+3);p1.setAttribute('class','pulse');hot.appendChild(p1);
     var p2=p1.cloneNode();p2.setAttribute('class','pulse b');hot.appendChild(p2);
@@ -207,10 +207,10 @@ function draw(d){
   });
   names.sort(function(a,b){return b[1]-a[1]});
   stat.textContent='Tổng '+total+' đơn ở '+names.length+' tỉnh/thành';
-  list.innerHTML='';
-  names.forEach(function(p){var s=document.createElement('span');s.textContent=p[0]+' ';var b=document.createElement('b');b.textContent=p[1];s.appendChild(b);list.appendChild(s)});
+  window.__vkNames=names;window.renderVk&&renderVk();
   if(d.unknown) stat.textContent+=' · '+d.unknown+' đơn chưa xác định tỉnh';
 }
+window.renderVk=function(){var on=window.__vkOnl||{};var arr=(window.__vkNames||[]).slice();arr.sort(function(a,b){return((on[b[0]]||0)-(on[a[0]]||0))||(b[1]-a[1])});list.innerHTML='';arr.forEach(function(p){var s=document.createElement('span');s.textContent=p[0]+' ';var b=document.createElement('b');b.textContent=p[1]+' đơn';s.appendChild(b);var o=on[p[0]]||0;if(o){var g=document.createElement('i');g.textContent=' · 🟢 '+o+' đang xem';g.style.color='#7dffb3';g.style.fontStyle='normal';s.appendChild(g)}list.appendChild(s)})};
 fetch(MAP_URL).then(function(r){return r.json()}).then(draw).catch(function(){stat.textContent='Chưa tải được số liệu, anh thử tải lại trang.'});
 })();
 </script>
@@ -233,8 +233,7 @@ function draw(d){
     var o=document.createElementNS(NS,'circle');o.setAttribute('cx',x);o.setAttribute('cy',y);o.setAttribute('r',r);o.setAttribute('class','onl onlc');hot.parentNode.appendChild(o);
   });
   stat.textContent='🟢 Đang online: '+(d.total||0)+' người';
-  list.innerHTML='';
-  Object.keys(c).sort(function(a,b){return c[b]-c[a]}).forEach(function(k){var s=document.createElement('span');s.textContent=k+' ';var b=document.createElement('b');b.textContent=c[k];s.appendChild(b);list.appendChild(s)});
+  window.__vkOnl=c;window.renderVk&&renderVk();
 }
 function ping(){
   var q='?action=ping&sid='+encodeURIComponent(sid)+'&region='+encodeURIComponent(geo.region)+'&city='+encodeURIComponent(geo.city);
